@@ -8,6 +8,10 @@ class Util {
 
     return buf;
   }
+
+  static randomHexString(length) {
+    return [...Array(length)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+  }
 }
 
 module.exports = Util;

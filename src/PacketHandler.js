@@ -9,6 +9,8 @@ const InitDhHandshakeComposer = require('./Messages/Outgoing/Handshake/InitDhHan
 
 const DhInitHandshakeEvent = require('./Messages/Incoming/Handshake/DhInitHandshakeEvent');
 const DhCompleteHandshakeEvent = require('./Messages/Incoming/Handshake/DhCompleteHandshakeEvent');
+const OkEvent = require('./Messages/Incoming/Handshake/OkEvent');
+const PingEvent = require('./Messages/Incoming/Misc/PingEvent');
 
 class PacketHandler {
   constructor(network) {
@@ -19,6 +21,8 @@ class PacketHandler {
   registerPackets() {
     this.registerPacket(Incoming.DhInitHandshake, DhInitHandshakeEvent);
     this.registerPacket(Incoming.DhCompleteHandshake, DhCompleteHandshakeEvent);
+    this.registerPacket(Incoming.Ping, PingEvent);
+    this.registerPacket(Incoming.Ok, OkEvent);
   }
 
   registerPacket(header, handler) {

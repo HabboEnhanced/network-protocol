@@ -2,7 +2,7 @@
   "name": "network-protocol",
   "version": "1.0.0",
   "description": "Habbo Unity network protocol for browsers",
-  "main": "src/Client.js",
+  "main": "dist/bundle.js",
   "scripts": {
     "build": "browserify src/Client.js --standalone Client -o dist/bundle.js",
     "watch": "watchify src/Client.js --standalone Client -d -o dist/bundle.js"
