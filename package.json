@@ -1,0 +1,26 @@
+{
+  "name": "network-protocol",
+  "version": "1.0.0",
+  "description": "Habbo Unity network protocol for browsers",
+  "main": "src/Client.js",
+  "scripts": {
+    "build": "browserify src/Client.js --standalone Client -o dist/bundle.js",
+    "watch": "watchify src/Client.js --standalone Client -d -o dist/bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HabboEnhanced/network-protocol.git"
+  },
+  "author": "Burak <burak@burak.fr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HabboEnhanced/network-protocol/issues"
+  },
+  "homepage": "https://github.com/HabboEnhanced/network-protocol#readme",
+  "devDependencies": {
+    "axios": "^0.21.1",
+    "browserify": "^17.0.0",
+    "node-forge": "github:HabboEnhanced/forge",
+    "watchify": "^3.11.1"
+  }
+}
