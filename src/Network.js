@@ -5,13 +5,21 @@ const Incoming = require('./Messages/Incoming/Incoming').getInstance();
 const Outgoing = require('./Messages/Outgoing/Outgoing').getInstance();
 const ClientCertificate = require('./ClientCertificate');
 const PacketHandler = require('./PacketHandler');
-const Util = require('./Util');
+const Session = require('./Session');
+const Util = require('./Util/Util');
+const RSAKey = require('./Crypto/RSAKey');
+const RSA = require('./Crypto/RSA');
 
 class Network {
   constructor(client, websocketEndpoint, ssoTicket) {
     this.client = client;
     this.websocketEndpoint = websocketEndpoint;
-    this.ssoTicket = ssoTicket;
+
+    this.session = new Session();
+    this.session.ssoTicket = ssoTicket;
+
+    this.session.crypto.rsa = new RSA();
+    this.session.crypto.rsa.setPublic(RSAKey.getN(), RSAKey.getE());
 
     this.packetHandler = new PacketHandler(this);
   }
@@ -47,7 +55,7 @@ class Network {
         var bytes = c.tlsData.getBytes();
         this.ws.send(Util.stringToBuffer(bytes));
 
-        console.log('[TLS] Sent', bytes.length, 'bytes');
+        //console.log('[TLS] Sent', bytes.length, 'bytes');
       },
       dataReady: c => {
         var response = c.data.getBytes();
@@ -77,7 +85,7 @@ class Network {
     if (buffer.length == 0)
       return;
 
-    console.log('[TLS] Received', buffer.length, 'bytes');
+    //console.log('[TLS] Received', buffer.length, 'bytes');
 
     if (buffer.length == 2 && buffer[0] == '79' && buffer[1] == '75') {
       this.tlsClient.handshake();
@@ -111,24 +119,6 @@ class Network {
       Outgoing.indexed[header.header] = header.name;
       Outgoing[header.name] = header.header;
     });
-  }
-
-  sendMessage(message) {
-    message.compose();
-    this.tlsClient.prepare(message.response.get().toString('binary'));
-  }
-
-  sendMessages(messages) {
-    let buffer = Buffer.alloc(0);
-
-    messages.forEach(message => {
-      message.compose();
-      buffer = Buffer.concat([buffer, message.response.get()]);
-    });
-
-    console.log(buffer);
-
-    this.tlsClient.prepare(buffer.toString('binary'));
   }
 }
 
