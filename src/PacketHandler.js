@@ -6,11 +6,14 @@ const Outgoing = require('./Messages/Outgoing/Outgoing').getInstance();
 
 const HelloComposer = require('./Messages/Outgoing/Handshake/HelloComposer');
 const InitDhHandshakeComposer = require('./Messages/Outgoing/Handshake/InitDhHandshakeComposer');
+const GetGuestRoomComposer = require('./Messages/Outgoing/Room/GetGuestRoomComposer');
+const FlatOpcComposer = require('./Messages/Outgoing/Room/FlatOpcComposer');
 
 const DhInitHandshakeEvent = require('./Messages/Incoming/Handshake/DhInitHandshakeEvent');
 const DhCompleteHandshakeEvent = require('./Messages/Incoming/Handshake/DhCompleteHandshakeEvent');
 const OkEvent = require('./Messages/Incoming/Handshake/OkEvent');
 const PingEvent = require('./Messages/Incoming/Misc/PingEvent');
+const RoomReadyEvent = require('./Messages/Incoming/Room/RoomReadyEvent');
 
 class PacketHandler {
   constructor(network) {
@@ -23,6 +26,7 @@ class PacketHandler {
     this.registerPacket(Incoming.DhCompleteHandshake, DhCompleteHandshakeEvent);
     this.registerPacket(Incoming.Ping, PingEvent);
     this.registerPacket(Incoming.Ok, OkEvent);
+    this.registerPacket(Incoming.RoomReady, RoomReadyEvent);
   }
 
   registerPacket(header, handler) {
@@ -85,6 +89,14 @@ class PacketHandler {
     } else {
       console.log('[UNHANDLED INCOMING][' + packet.name + ']', packet.getMessageBody());
     }
+  }
+
+  loadRoom(roomId, password) {
+    console.log(roomId);
+    let getGuestRoom = new GetGuestRoomComposer(roomId);
+    let flatOpc = new FlatOpcComposer(roomId, password ? password : '');
+
+    this.sendMessages([getGuestRoom, flatOpc]);
   }
 
   instantiate() {

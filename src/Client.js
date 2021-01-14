@@ -10,6 +10,10 @@ class Client extends EventTarget {
   async connect() {
     await this.network.connect();
   }
+
+  loadRoom(roomId, password) {
+    this.network.packetHandler.loadRoom(roomId, password);
+  }
 }
 
 module.exports = Client;

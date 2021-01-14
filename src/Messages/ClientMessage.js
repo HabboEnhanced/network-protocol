@@ -32,11 +32,14 @@ class ClientMessage {
   }
 
   appendLong(value) {
-    if (typeof value !== 'bigint')
-      throw 'Input value have to be a bigint.';
+    if (typeof value !== 'bigint') {
+      //value = BigInt(value);
+    }
 
     let buffer = Buffer.alloc(8);
-    buffer.writeBigInt64BE(value, 0);
+    //buffer.writeBigInt64BE(value, 0);
+    buffer.writeInt32BE(0, 0);
+    buffer.writeInt32BE(value, 4);
 
     this.buffer = Buffer.concat([this.buffer, buffer]);
   }

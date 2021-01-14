@@ -4,8 +4,10 @@
 	<script type="text/javascript" src="dist/bundle.js"></script>
 	<script type="text/javascript">
 		(async () => {
-			let client = new Client('fr', 'ssoTicket');
+			let client = new Client('fr', prompt('SSO :'));
+      window.client = client;
 			await client.connect();
+      //client.loadRoom(46198653, '');
 		})();
 	</script>
 	<title>Client test</title>
